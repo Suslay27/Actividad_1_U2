@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Monedas Pro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <div class="glass-card">
+        <h2>Calculadora de Divisas</h2>
+        
+        <form action="/convertir" method="POST">
+            <div class="input-group">
+                <label for="cantidad">Cantidad a convertir</label>
+                <input type="number" name="cantidad" id="cantidad" step="0.01" value="1.00" required placeholder="0.00">
+            </div>
+
+            <div class="input-group">
+                <label for="desde">Desde</label>
+                <select name="desde" id="desde">
+                    {% for code, name in monedas.items() %}
+                        <option value="{{ code }}">{{ code }} - {{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="button" class="btn-swap" onclick="swap()">
+                <span>⇅</span> INTERCAMBIAR
+            </button>
+
+            <div class="input-group">
+                <label for="a">A</label>
+                <select name="a" id="a">
+                    {% for code, name in monedas.items() %}
+                        <option value="{{ code }}" {% if code == 'EUR' %}selected{% endif %}>{{ code }} - {{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn-primary">
+                CONVERTIR DIVISA
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function swap() {
+            let d = document.getElementById('desde');
+            let a = document.getElementById('a');
+            let t = d.value; 
+            d.value = a.value; 
+            a.value = t;
+        }
+    </script>
+</body>
+</html>

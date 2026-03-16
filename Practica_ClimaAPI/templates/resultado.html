@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Clima en {{ clima.name }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            {% set desc_clima = clima.weather[0].description|lower %}
+            {% if 'despejado' in desc_clima or 'claro' in desc_clima %}
+            --bg-color: #fb923c; /* Naranja despejado */
+            {% elif 'nieve' in desc_clima %}
+            --bg-color: #bae6fd; /* Azul claro nieve */
+            {% elif 'lluvia' in desc_clima or 'llovizna' in desc_clima or 'tormenta' in desc_clima %}
+            --bg-color: #3b82f6; /* Azul lluvia */
+            {% elif 'nub' in desc_clima or 'niebla' in desc_clima %}
+            --bg-color: #9ca3af; /* Gris nublado */
+            {% else %}
+            --bg-color: #c2cece;
+            {% endif %}
+            --heart-pink: #ff004f;
+            --text-dark: #333;
+            --text-gray: #666;
+            --card-bg: rgba(255, 255, 255, 0.7);
+        }
+        body {
+            margin: 0;
+            font-family: 'Century Gothic', 'Montserrat', 'Futura', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* Album side band */
+        body::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 60px; /* Wider lines */
+            background: linear-gradient(to bottom, 
+                #9d005d 0%, #9d005d 9.09%, 
+                #343b6d 9.09%, #343b6d 18.18%, 
+                #fef200 18.18%, #fef200 27.27%, 
+                #a3d9cf 27.27%, #a3d9cf 36.36%, 
+                #00afee 36.36%, #00afee 45.45%, 
+                #00a086 45.45%, #00a086 54.54%, 
+                #fbbed1 54.54%, #fbbed1 63.63%, 
+                #d9e456 63.63%, #d9e456 72.72%, 
+                #c78db2 72.72%, #c78db2 81.81%, 
+                #e1007a 81.81%, #e1007a 90.9%, 
+                #3e1374 90.9%, #3e1374 100%
+            );
+        }
+        .card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 4px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            text-align: center;
+            width: 350px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        }
+        .avatar-box {
+            background: rgba(255,255,255,0.5);
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 20px auto;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .temp { font-size: 4rem; font-weight: 200; margin: 10px 0; color: var(--text-dark); }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 25px;
+            background: rgba(255,255,255,0.4);
+            padding: 20px;
+            border-radius: 4px;
+        }
+        small { color: var(--text-gray); text-transform: uppercase; letter-spacing: 1px; font-size: 0.7rem; }
+        .data-value { display: block; font-weight: 500; font-size: 1.2rem; margin-top: 5px; }
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            color: var(--heart-pink);
+            text-decoration: none;
+            border: 1px solid var(--heart-pink);
+            padding: 12px 25px;
+            border-radius: 4px;
+            transition: 0.3s;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 80%;
+        }
+        .back-btn:hover { background: var(--heart-pink); color: white; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="avatar-box">
+            {% set desc = clima.weather[0].description|lower %}
+            {% set temp = clima.main.temp %}
+            
+            {% if 'lluvia' in desc or 'llovizna' in desc or 'tormenta' in desc %}
+                <img src="{{ url_for('static', filename='images/dropout_bear_lluvia.png') }}" alt="Lluvia" style="width: 80%;">
+            {% elif temp < 12 %}
+                <img src="{{ url_for('static', filename='images/dropout_bear_frio.png') }}" alt="Frío" style="width: 80%;">
+            {% elif 'nub' in desc or 'niebla' in desc %}
+                <img src="{{ url_for('static', filename='images/dropout_bear_nublado.png') }}" alt="Nublado" style="width: 80%;">
+            {% elif 'despejado' in desc or 'claro' in desc %}
+                <img src="{{ url_for('static', filename='images/dropout_bear_soleado.png') }}" alt="Soleado" style="width: 80%;">
+            {% else %}
+                <img src="{{ url_for('static', filename='images/dropout_bear_default.png') }}" alt="Clima" style="width: 80%;">
+            {% endif %}
+        </div>
+
+        <img src="https://flagcdn.com/w40/{{ clima.sys.country|lower }}.png" style="border-radius:3px;">
+        <h2 style="margin:5px 0;">{{ clima.name }}</h2>
+        
+        <img src="http://openweathermap.org/img/wn/{{ clima.weather[0].icon }}@2x.png">
+        
+        <div class="temp">{{ temp|round }}°C</div>
+        <p style="text-transform: capitalize; margin: 0;">{{ desc }}</p>
+
+        <div class="info-grid">
+            <div><small>Humedad</small><span class="data-value">{{ clima.main.humidity }}%</span></div>
+            <div><small>Viento</small><span class="data-value">{{ clima.wind.speed }} km/h</span></div>
+        </div>
+
+        <a href="/" class="back-btn">Nueva Búsqueda</a>
+    </div>
+</body>
+</html>

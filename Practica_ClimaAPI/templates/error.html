@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Error - Ciudad no encontrada</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #c2cece;
+            --heart-pink: #ff004f;
+            --text-dark: #333;
+            --card-bg: rgba(255, 255, 255, 0.7);
+        }
+        body {
+            margin: 0;
+            font-family: 'Century Gothic', 'Montserrat', 'Futura', sans-serif;
+            background-color: var(--bg-color);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        body::before {
+            content: "";
+            position: absolute;
+            left: 0; top: 0; bottom: 0; width: 60px; /* Wider lines */
+            background: linear-gradient(to bottom, 
+                #9d005d 0%, #9d005d 9.09%, 
+                #343b6d 9.09%, #343b6d 18.18%, 
+                #fef200 18.18%, #fef200 27.27%, 
+                #a3d9cf 27.27%, #a3d9cf 36.36%, 
+                #00afee 36.36%, #00afee 45.45%, 
+                #00a086 45.45%, #00a086 54.54%, 
+                #fbbed1 54.54%, #fbbed1 63.63%, 
+                #d9e456 63.63%, #d9e456 72.72%, 
+                #c78db2 72.72%, #c78db2 81.81%, 
+                #e1007a 81.81%, #e1007a 90.9%, 
+                #3e1374 90.9%, #3e1374 100%
+            );
+        }
+        .container {
+            background: var(--card-bg);
+            padding: 50px;
+            border-radius: 4px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            text-align: center;
+            color: var(--text-dark);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            max-width: 400px;
+            width: 90%;
+        }
+        h1 { font-weight: 300; letter-spacing: -1px; margin-bottom: 20px; }
+        p { color: #666; margin-bottom: 30px; }
+        .back-btn {
+            display: inline-block;
+            color: var(--heart-pink);
+            text-decoration: none;
+            border: 1px solid var(--heart-pink);
+            padding: 12px 25px;
+            border-radius: 4px;
+            transition: 0.3s;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .back-btn:hover { background: var(--heart-pink); color: white; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💔 ¡Ups! Ciudad no encontrada</h1>
+        <p>Asegúrate de escribir bien el nombre o intenta con una ciudad más grande.</p>
+        <a href="/" class="back-btn">Volver al buscador</a>
+    </div>
+</body>
+</html>

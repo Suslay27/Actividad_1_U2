@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASA APOD - {{ datos.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <canvas id="canvas-estrellas"></canvas>
+
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <h1>COSMOS EXPLORER</h1>
+            </div>
+            <div class="date-selector">
+                <form action="/" method="get">
+                    <input type="date" name="fecha" value="{{ fecha_actual }}" max="{{ hoy }}" min="{{ limite }}"
+                        onchange="this.form.submit()">
+                </form>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="media-container" id="media-viewport">
+                <div class="loader" id="loader"></div>
+                {% if datos.media_type == 'video' %}
+                <iframe src="{{ datos.url }}" frameborder="0" allowfullscreen
+                    onload="document.getElementById('loader').style.display='none'"></iframe>
+                {% else %}
+                <img src="{{ url_for('proxy', url=datos.url) }}" alt="{{ datos.title }}" id="apod-image"
+                    onload="document.getElementById('loader').style.display='none'"
+                    onerror="this.src='https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800'; document.getElementById('loader').style.display='none'; console.log('Image failed to load, using backup');">
+                {% endif %}
+            </div>
+
+            <div class="info-section">
+                <div class="info-header">
+                    <h2>{{ datos.title }}</h2>
+                    <span class="date-badge">{{ datos.date }}</span>
+                </div>
+                <div class="explanation">
+                    <p>{{ datos.explanation }}</p>
+                </div>
+            </div>
+
+            {% if galeria %}
+            <div class="gallery-section" style="margin-top: 2rem; width: 100%;">
+                <h3 style="color: #fff; margin-bottom: 1rem; text-align: center;">Últimos 7 días</h3>
+                <div class="gallery-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px;">
+                    {% for item in galeria %}
+                        {% if item.media_type == 'image' %}
+                        <a href="/?fecha={{ item.date }}" class="gallery-item" style="display: block; border-radius: 8px; overflow: hidden; border: 2px solid transparent; transition: 0.3s;" onmouseover="this.style.borderColor='#6366f1'" onmouseout="this.style.borderColor='transparent'">
+                            <img src="{{ url_for('proxy', url=item.url) }}" alt="{{ item.title }}" style="width: 100%; height: 100px; object-fit: cover; display: block;" title="{{ item.date }} - {{ item.title }}">
+                        </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </main>
+
+        <nav class="navigation">
+            {% if ayer %}
+            <a href="/?fecha={{ ayer }}" class="nav-btn">← Anterior</a>
+            {% else %}
+            <span class="nav-btn disabled">← Anterior</span>
+            {% endif %}
+
+            <a href="/?fecha={{ hoy }}" class="nav-btn">Hoy</a>
+
+            {% if manana %}
+            <a href="/?fecha={{ manana }}" class="nav-btn">Siguiente →</a>
+            {% else %}
+            <span class="nav-btn disabled">Siguiente →</span>
+            {% endif %}
+        </nav>
+
+        <footer class="footer">
+            <p>&copy; 2024 Cosmos Explorer. Datos proporcionados por NASA API.</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/estrellas.js') }}"></script>
+</body>
+
+</html>
